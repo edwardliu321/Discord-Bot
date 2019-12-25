@@ -6,18 +6,26 @@ require('dotenv').config();
 const api_key = process.env.API_KEY;
 const discord_token = process.env.DISCORD_TOKEN;
 
-function get_team_info(summoner_name){
-  axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summoner_name}?api_key=${api_key}`)
-  .then(response => {
-    let summoner = response.data;
-    axios.get(`https://na1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summoner.id}?api_key=${api_key}`)
-    .then(response => {    
-      console.log(response.data.participants)
-    });
-  });
+async function summoner_by_name(summoner_name){
+  let summoner_response = await axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summoner_name}?api_key=${api_key}`);
+  return summoner_response.data;
+}
+
+async function team_info(summoner_name){
+  let summoner = await summoner_by_name(summoner_name);
+  let spec = await axios.get(`https://na1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summoner.id}?api_key=${api_key}`);
+  console.log(spec.data.participants);
+}
+
+async function summoner_info(summoner_name){
+  let summoner = await summoner_by_name(summoner_name);
+  "https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/test"
+  let info = await axios.get(`https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summoner.id}?api_key=${api_key}`);
+
+  console.log(info.data);
 }
 //test
-//get_team_info('vooby');
+summoner_info('IvanJYang');
 
 
 //client
@@ -50,4 +58,4 @@ client.on('message', msg => {
   }
 });
 
-client.login(discord_token);
+//client.login(discord_token);
