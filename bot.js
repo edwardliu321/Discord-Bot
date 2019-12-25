@@ -4,6 +4,7 @@ const axios = require('axios');
 require('dotenv').config();
 
 const api_key = process.env.API_KEY;
+const discord_token = process.env.DISCORD_TOKEN;
 
 function get_team_info(summoner_name){
   axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summoner_name}?api_key=${api_key}`)
@@ -49,4 +50,4 @@ client.on('message', msg => {
   }
 });
 
-//client.login('NTQxNDU3NDAyNDQ5NjI1MDg4.Xdiw4A.iyYdkB38Wwn0HOjRWsnWICk83Ik');
+client.login(discord_token);
